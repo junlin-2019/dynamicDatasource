@@ -1,0 +1,19 @@
+server:
+  port: 8082
+dbcfg:
+  filepath: classpath:dbcfg.conf
+datasource:
+  db01: mysql01
+  db02: mysql02
+spring:
+  datasource:
+    minIdle: 10
+    maxActive: 50
+    maxLifetime: 1800
+    idleTimeout: 600
+logging:
+  level:
+    com:
+      example:
+        dao: debug
+

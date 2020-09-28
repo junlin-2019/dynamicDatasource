@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.dao.TAddrDao">
+
+    <resultMap type="com.example.entity.TAddr" id="TAddrMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="addr" column="addr" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="TAddrMap">
+        select
+          id, addr
+        from db02.t_addr
+        where id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="TAddrMap">
+        select
+          id, addr
+        from db02.t_addr
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="TAddrMap">
+        select
+        id, addr
+        from db02.t_addr
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="addr != null and addr != ''">
+                and addr = #{addr}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into db02.t_addr(addr)
+        values (#{addr})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into db02.t_addr(addr)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.addr})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into db02.t_addr(addr)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.addr})
+        </foreach>
+        on duplicate key update
+        addr = values(addr)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update db02.t_addr
+        <set>
+            <if test="addr != null and addr != ''">
+                addr = #{addr},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from db02.t_addr where id = #{id}
+    </delete>
+
+</mapper>
